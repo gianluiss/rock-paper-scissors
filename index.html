@@ -5,11 +5,30 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rock-Paper-Scissors</title>
+    <script src="script.js" defer></script>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
     <h1>Rock-Paper-Scissors</h1>
-    <script src="script.js"></script>
+    <div id="image-div">
+        <div id="rock-div">
+            <img src="./images/the-rock.webp" alt="The Rock representing as the rock button" class="image" id="rock">
+            <h2 id="rock">Rock</h2>
+        </div>
+        <div id="paper-div">
+            <img src="./images/doodle-bob.webp" alt="Doddlebob representing paper" class="image" id="paper">
+            <h2 id="paper">Paper</h2>
+        </div>
+        <div id="scissor-div">
+            <img src="./images/edward-scissor.jpg" alt="Edward Scissorhands representing scissor" class="image" id="scissor">
+            <h3 id="scissor">Scissor</h3>
+        </div>
+    </div>
+    <h2 id="roundScore">You: 0 <br>Masamang Nilalang: 0</h2>
+    <h1 id="roundOutcome"></h1>
+
+    <div id="outcome-div"></div>
 </body>
 
 </html>

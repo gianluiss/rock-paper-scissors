@@ -1,3 +1,9 @@
+const imageDiv = document.querySelector("#image-div");
+const rock = document.querySelector("#rock");
+const paper = document.querySelector("#paper");
+const scissor = document.querySelector("#scissor");
+const outcomeDiv = document.querySelector("#outcome-div");
+
 function getComputerChoice() {
     let choice = Math.floor(Math.random() * 3) + 1;
 
@@ -11,15 +17,12 @@ function getComputerChoice() {
     return null;
 }
 
-function getHumanChoice() {
-    let humanChoice = prompt("Enter rock, paper, or scissor: ");
-    humanChoice = humanChoice.toLowerCase();
-
-    if(humanChoice === "rock")
+function getHumanChoice(choice) { 
+    if(choice === "rock")
         return "rock";
-    else if(humanChoice === "paper")
+    else if(choice === "paper")
         return "paper";
-    else if(humanChoice === "scissor")
+    else if(choice === "scissor")
         return "scissor";
     else {
         alert("Invalid Choice");
@@ -38,59 +41,96 @@ function playRound(computerChoice, humanChoice) {
         return humanChoice === "rock" ? 1 : 2;
 }
 
-function playGame(computerChoice, humanChoice) {
-    let humanScore = 0;
-    let computerScore = 0;
+let humanScore = 0;
+let computerScore = 0;
+let round = 0;
+let maxRound = 5;
+
+function insertKalbo() {
+    let message = document.createElement('h1');
+    message.textContent = "You Win! :D\nMAYROON KANG KALBONG WONWOO!!!";
+    message.style.color = "red";
+    message.style.whiteSpace = "pre-line";
+    outcomeDiv.appendChild(message);
+
+    let img = document.createElement('img');
+    img.src = "./images/kalbo.jpg";
+    img.style.width = "300px";
+    outcomeDiv.appendChild(img);
+}
+
+function insertChaewon() {
+    let message = document.createElement('h1');
+    message.textContent = "You have to lock in!";
+    message.style.color = "red";
+    outcomeDiv.appendChild(message);
+
+    let img = document.createElement('img');
+    img.src = "./images/lock-in.gif";
+    img.style.width = "300px";
+    outcomeDiv.appendChild(img);
+}
+
+function playGame(event) {
+    let choice = event.target.id;
+
+    let choiceIsValid = false;
+    if(choice == "rock") choiceIsValid = true;
+    if(choice == "paper") choiceIsValid = true;
+    if(choice == "scissor") choiceIsValid = true;
+    if(!choiceIsValid) return;
+
+    const computerChoice = getComputerChoice();
+    const humanChoice = choice;
+    round++;
 
     let outcome = playRound(computerChoice, humanChoice);
+    let roundOutcomeStr = "";
 
     if (outcome === 0) {
-        console.log("Draw");
+        console.log("It's a draw!");
+        humanScore++;
+        computerScore++;
+        roundOutcomeStr = "It's a draw!";
     }
     else if (outcome === 1) {
-        console.log("Human Win");
+        console.log(`You win! ${humanChoice} beats ${computerChoice}`);
         humanScore++;
+        roundOutcomeStr = `You win! ${humanChoice} beats ${computerChoice}`;
     }
-    else {
-        console.log("Computer Win");
+    else if (outcome === 2) {
+        console.log(`You lose! ${humanChoice} can't beat ${computerChoice}`);
         computerScore++;
+        roundOutcomeStr = `You lose! ${humanChoice} can't beat ${computerChoice}`;
     }
-    console.log(`Human Score: ${humanScore}, Computer Score: ${computerScore}`);
+    console.log(`Human: ${humanScore}, Computer: ${computerScore}`);
+
+    updateState(roundOutcomeStr);
+
+    if (round === maxRound) {
+        roundOutcome.textContent = "";
+        if (humanScore > computerScore) {
+            console.log("CONGRATULATIONS YOU WIN THE GAME!");
+            insertKalbo();
+        }
+        else if (humanScore < computerScore) {
+            console.log("Aww you lost...Better luck next time!");
+            insertChaewon();
+        }
+        else {
+            console.log("Nice Try! It's a Draw!");
+            insertChaewon();
+        }
+        imageDiv.removeEventListener('click', playGame);
+        return;
+    }
 }
 
-function playGame() {
-    const rounds = 5;
-    let humanScore = 0;
-    let computerScore = 0;
-    for(let i = 0; i < rounds; i++) {
-        const computerChoice = getComputerChoice();
-        const humanChoice = getHumanChoice();
+imageDiv.addEventListener('click', playGame);
 
-        let outcome = playRound(computerChoice, humanChoice);
-
-        if(outcome === 0) {
-            console.log("It's a draw!");
-            humanScore++;
-            computerScore++;
-        }
-        else if(outcome === 1) {
-            console.log(`You win! ${humanChoice} beats ${computerChoice}`)
-            humanScore++;
-        }
-        else if(outcome === 2) {
-            console.log(`You lose! ${humanChoice} can't beat ${computerChoice}`);
-            computerScore++;
-        }
-
-        console.log(`Human: ${humanScore}, Computer: ${computerScore}`);
-    }
-
-    if(humanScore > computerScore)
-        console.log("CONGRATULATIONS YOU WIN THE GAME!");
-    else if(humanScore < computerScore)
-        console.log("Aww you lost...Better luck next time!");
-    else
-        console.log("Nice Try! It's a Draw!");
+const roundScore = document.querySelector("#roundScore");
+const roundOutcome = document.querySelector("#roundOutcome");
+function updateState(str) {
+    roundScore.textContent = `You: ${humanScore}\nMasamang Nilalang: ${computerScore}`
+    roundOutcome.textContent = str;
 }
-
-playGame();
